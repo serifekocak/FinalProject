@@ -13,8 +13,8 @@ namespace Business.Concrete
     {
         IProductDal _productDal;
 
-        //Business katmanının bildiği tek şey IProductDal'dır.
-        //çalışılmak istenen framework (inMemory, EntityFramework, Dapper,..) constructor a parametre olarak verilir.
+        // Business katmanının bildiği tek şey IProductDal'dır.
+        // Çalışılmak istenen framework (inMemory, EntityFramework, Dapper,..) constructor a parametre olarak verilir.
         // Bunların hepsi IProductDal nesnesidir.
         public ProductManager(IProductDal productDal)
         {
@@ -26,6 +26,16 @@ namespace Business.Concrete
             //İş Kodları
             return _productDal.GetAll();
 
+        }
+
+        public List<Product> GetAllByCategoryId(int id)
+        {
+            return _productDal.GetAll(p=>p.CategoryId == id);
+        }
+
+        public List<Product> GetByUnitPrice(decimal min, decimal max)
+        {
+            return _productDal.GetAll(p=>p.UnitPrice >= min && p.UnitPrice <= max);
         }
     }
 }
