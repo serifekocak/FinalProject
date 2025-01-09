@@ -19,12 +19,42 @@ namespace WebAPI.Controllers
             _productService = productService;
         }
 
-        [HttpGet]
-        public List<Product> Get()
+        // Allias --> Birden fazla GET metodu olduğunda istekte bulunurken api hangi metodu çalıştıracağını bilemez. Bunun için allias veririz.
+        // API çağırırken --> https://localhost:44335/api/products/getall
+        [HttpGet("getall")]
+        public IActionResult GetAll()
         {
             // IProductService productService = new ProductManager(new EfProductDal());  --> Dependency chain (Bağımlılık zinciri) --> iki somut bağlılık (ProductManager, EfProductDal)
             var result = _productService.GetAll();
-            return result.Data;
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        // API çağırırken --> https://localhost:44335/api/products/getbyid?id=1
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int id)
+        {
+            var result = _productService.GetById(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+
+        }
+
+        [HttpPost("add")]
+        public IActionResult Add(Product product)
+        {
+            var result = _productService.Add(product);
+            if(result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }
