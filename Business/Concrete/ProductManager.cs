@@ -1,12 +1,17 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.AutoFac.Validation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntitiyFramework;
 using Entities.Concrete;
 using Entities.DTOs;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,13 +30,27 @@ namespace Business.Concrete
             _productDal = productDal;
         }
 
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-            if (product.ProductName.Length < 2)
-            {
-                // magic strings --> ErrorResult("Ürün ismi en az 2 karakter olmalıdır");
-                return new ErrorResult(Messages.ProductNameInvalid);
-            }
+            // Iflerle kontrol etmek yerine Validasyon işlemi yapılabilir.
+            //if (product.ProductName.Length < 2)
+            //{
+            //    // magic strings --> ErrorResult("Ürün ismi en az 2 karakter olmalıdır");
+            //    return new ErrorResult(Messages.ProductNameInvalid);
+            //}
+
+            // Validasyon tüm projelerde ortak olduğu için Core katmanında tool olarak kullanılabilir.
+            //var context = new ValidationContext<Product>(product);
+            //ProductValidator productValidator = new ProductValidator();
+            //var result = productValidator.Validate(context);
+            //if (!result.IsValid)
+            //{
+            //    throw new ValidationException(result.Errors);
+            //}
+
+            // Aspect olarak metot dışına taşı (AOP)
+            //ValidationTool.Validate(new ProductValidator(), product);
 
             _productDal.Add(product);
             return new SuccessResult(Messages.ProductAdded);
