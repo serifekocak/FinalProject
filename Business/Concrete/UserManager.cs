@@ -15,7 +15,7 @@ namespace Business.Concrete
 
         public UserManager(IUserDal userDal)
         {
-            
+            _userDal = userDal;
         }
         public void Add(User user)
         {

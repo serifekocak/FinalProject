@@ -3,12 +3,15 @@ using Autofac.Extensions.DependencyInjection;
 using Business.Abstract;
 using Business.Concrete;
 using Business.DependencyResolvers.AutoFac;
+using Core.DependencyResolvers;
+using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntitiyFramework;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Core.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,8 @@ builder.Services.AddControllers();
 // Biri constructorda IProductService nesnesi isterse ona bir ProductManager nesnesi ver (newlenir)
 //builder.Services.AddSingleton<IProductService, ProductManager>();
 //builder.Services.AddSingleton<IProductDal, EfProductDal>();
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); 
 
 // .Net içerisinde bulunan IoC container yerine AutoFac kullanmasýný söylüyoruz.
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
@@ -45,6 +50,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
         };
     });
+
+builder.Services.AddDependencyResolvers(new ICoreModule[] { new CoreModule() });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
