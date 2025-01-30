@@ -22,7 +22,7 @@ namespace Business.Constants
         public static string UserRegistered = "Kayıt olundu";
         public static string UserNotFound = "Kullanıcı bulunamadı";
         public static string PasswordError = "Parola hatası";
-        public static string SuccessfullLogin = "Başarılı giriş";
+        public static string SuccessfulLogin = "Başarılı giriş";
         public static string UserAlreadyExists = "Kullanıcı zaten kayıtlı";
         public static string AccessTokenCreated = "Token oluşturuldu";
     }
